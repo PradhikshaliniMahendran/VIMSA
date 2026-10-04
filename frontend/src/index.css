@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 0 0% 0%;
+    --secondary: 0 0% 100%;
+    --accent: 43 63% 53%; /* #D4AF37 */
+    --accent-light: 47 84% 66%; /* #F0D060 */
+    --background: 0 0% 97%;
+    --surface: 0 0% 100%;
+    --border: 0 0% 90%;
+    --text-primary: 0 0% 7%;
+    --text-secondary: 0 0% 40%;
+  }
+
+  /* Hide number input arrows globally */
+  input[type="number"]::-webkit-inner-spin-button, 
+  input[type="number"]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  .dark {
+    --primary: 0 0% 100%;
+    --secondary: 0 0% 0%;
+    --background: 0 0% 4%; /* #0A0A0A */
+    --surface: 0 0% 7%; /* #111111 */
+    --border: 0 0% 16%; /* #2A2A2A */
+    --text-primary: 0 0% 95%;
+    --text-secondary: 0 0% 65%;
+  }
+
+  body {
+    @apply font-inter bg-background text-text-primary;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-outfit tracking-wide;
+  }
+}
+
+/* Custom premium scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #222222;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+/* Premium gradient overlays */
+.premium-gradient-bg {
+  background: linear-gradient(135deg, #000000 0%, #111111 50%, #0A0A0A 100%);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #AA771C 100%);
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Image zoom effect container */
+.zoom-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.zoom-image {
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.zoom-container:hover .zoom-image {
+  transform: scale(1.1);
+}
+
+/* Selection styling */
+::selection {
+  background: #D4AF37;
+  color: #000000;
+}
+
+/* Custom continuous horizontal marquee */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
