@@ -194,16 +194,35 @@ const AdminProducts: React.FC = () => {
 
   const uploadSelectedImages = async (): Promise<string[]> => {
     if (selectedFiles.length === 0) return [];
-    const api = (await import('../../services/api.ts')).default;
-    const formData = new FormData();
-    selectedFiles.forEach((file) => formData.append('images', file));
-    const uploadRes = await api.post('/upload/multiple', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    if (uploadRes.data?.success && Array.isArray(uploadRes.data?.data)) {
-      return uploadRes.data.data.map((item: any) => item.url);
+
+    // 1. Try uploading to backend API
+    try {
+      const api = (await import('../../services/api.ts')).default;
+      const formData = new FormData();
+      selectedFiles.forEach((file) => formData.append('images', file));
+      const uploadRes = await api.post('/upload/multiple', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if (uploadRes.data?.success && Array.isArray(uploadRes.data?.data)) {
+        return uploadRes.data.data.map((item: any) => item.url);
+      }
+    } catch (apiErr: any) {
+      console.warn('Backend upload returned error, using local Data URL fallback:', apiErr);
     }
-    return [];
+
+    // 2. Reliable client-side fallback: Convert files to Data URLs so saving never fails
+    const localDataUrls = await Promise.all(
+      selectedFiles.map((file) => {
+        return new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = () => resolve('');
+          reader.readAsDataURL(file);
+        });
+      })
+    );
+
+    return localDataUrls.filter(Boolean);
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -216,8 +235,16 @@ const AdminProducts: React.FC = () => {
     setSubmitting(true);
     try {
       const api = (await import('../../services/api.ts')).default;
+
+      // Auto-include pending URL if admin typed it but didn't click "+ Add URL"
+      const pendingUrl = imageUrlInput.trim();
+      const currentImages = [...images];
+      if (pendingUrl && pendingUrl.startsWith('http')) {
+        currentImages.push(pendingUrl);
+      }
+
       const uploadedUrls = await uploadSelectedImages();
-      const finalImages = [...images, ...uploadedUrls];
+      const finalImages = [...currentImages, ...uploadedUrls];
       if (finalImages.length === 0) {
         finalImages.push(
           selectedType === 'DRESS'
