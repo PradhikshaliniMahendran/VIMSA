@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Plus, Trash, Edit, Search, PackageCheck, PackageX, AlertTriangle, X } from 'lucide-react';
+import { Plus, Trash, Edit, Search, PackageCheck, PackageX, AlertTriangle, X, Upload, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
 import { productService } from '../../services/productService.ts';
 import { ProductType } from '../../components/ui/ProductCard.tsx';
 import { useCart } from '../../hooks/useCart.ts';
@@ -50,6 +50,7 @@ const AdminProducts: React.FC = () => {
   const [sku, setSku] = useState('');
   const [images, setImages] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [imageUrlInput, setImageUrlInput] = useState('');
   const [isNewArrival, setIsNewArrival] = useState(false);
   const [isFeatured, setIsFeatured] = useState(false);
   const [status, setStatus] = useState<'active' | 'inactive'>('active');
@@ -113,6 +114,7 @@ const AdminProducts: React.FC = () => {
     setSku('');
     setImages([]);
     setSelectedFiles([]);
+    setImageUrlInput('');
     setIsNewArrival(false);
     setIsFeatured(false);
     setStatus('active');
@@ -140,6 +142,7 @@ const AdminProducts: React.FC = () => {
     setSku(p.sku);
     setImages(p.images || []);
     setSelectedFiles([]);
+    setImageUrlInput('');
     setIsNewArrival(p.isNewArrival || false);
     setIsFeatured(p.isFeatured || false);
     setStatus(p.status === 'out_of_stock' ? 'active' : (p.status as any) || 'active');
@@ -162,6 +165,31 @@ const AdminProducts: React.FC = () => {
         }))
       : [];
     setSizes(initialSizes);
+  };
+
+  const handleAddImageUrl = () => {
+    if (!imageUrlInput.trim()) return;
+    if (!imageUrlInput.startsWith('http')) {
+      toast.error('Please enter a valid URL starting with http:// or https://');
+      return;
+    }
+    setImages((prev) => [...prev, imageUrlInput.trim()]);
+    setImageUrlInput('');
+  };
+
+  const handleRemoveImage = (indexToRemove: number) => {
+    setImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      setSelectedFiles((prev) => [...prev, ...filesArray]);
+    }
+  };
+
+  const handleRemoveSelectedFile = (indexToRemove: number) => {
+    setSelectedFiles((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
   const uploadSelectedImages = async (): Promise<string[]> => {
@@ -575,6 +603,113 @@ const AdminProducts: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Product Images Section */}
+          <div className="space-y-3 border border-gray-200 dark:border-dark-border p-4 rounded bg-neutral-50/50 dark:bg-neutral-900/30">
+            <div className="flex items-center justify-between">
+              <label className="text-xs uppercase font-outfit font-bold text-text-primary dark:text-gray-200 flex items-center gap-1.5">
+                <ImageIcon className="w-4 h-4 text-accent" />
+                <span>Product Images</span>
+              </label>
+              <span className="text-[10px] text-text-secondary lowercase font-normal">
+                (Upload local files or paste image URLs)
+              </span>
+            </div>
+
+            {/* File Upload Box */}
+            <div className="relative border-2 border-dashed border-gray-300 dark:border-dark-border hover:border-accent dark:hover:border-accent transition-colors p-5 text-center rounded bg-white dark:bg-dark-surface cursor-pointer group">
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFileSelect}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                id="product-image-file-input"
+              />
+              <div className="flex flex-col items-center justify-center space-y-1">
+                <Upload className="w-6 h-6 text-text-secondary group-hover:text-accent transition-colors" />
+                <p className="text-xs font-semibold text-text-primary dark:text-gray-200">
+                  Click to browse or drag &amp; drop product images
+                </p>
+                <p className="text-[10px] text-text-secondary">
+                  PNG, JPG, WEBP (Supports multiple images)
+                </p>
+              </div>
+            </div>
+
+            {/* URL Input Bar */}
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <LinkIcon className="absolute left-3 top-2.5 w-3.5 h-3.5 text-text-secondary" />
+                <input
+                  type="url"
+                  placeholder="Or paste online image URL (https://...)"
+                  value={imageUrlInput}
+                  onChange={(e) => setImageUrlInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddImageUrl();
+                    }
+                  }}
+                  className="w-full bg-white dark:bg-dark-surface border border-gray-300 dark:border-dark-border pl-8 pr-3 py-1.5 text-xs outline-none focus:border-accent font-inter text-text-primary dark:text-white rounded"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleAddImageUrl}
+                className="px-3 py-1.5 bg-neutral-800 hover:bg-black dark:bg-neutral-700 dark:hover:bg-neutral-600 text-white text-[10px] font-bold uppercase rounded transition-colors whitespace-nowrap"
+              >
+                + Add URL
+              </button>
+            </div>
+
+            {/* Preview Grid */}
+            {(images.length > 0 || selectedFiles.length > 0) && (
+              <div className="pt-2">
+                <p className="text-[10px] uppercase font-bold text-text-secondary mb-2">
+                  Attached Images ({images.length + selectedFiles.length})
+                </p>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                  {/* Existing Image URLs */}
+                  {images.map((imgUrl, index) => (
+                    <div key={`existing-${index}`} className="relative group border border-gray-200 dark:border-dark-border rounded overflow-hidden aspect-square bg-neutral-100 dark:bg-neutral-800">
+                      <img src={imgUrl} alt={`Product ${index}`} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 opacity-90 group-hover:opacity-100 shadow transition-opacity"
+                        title="Remove image"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                      <span className="absolute bottom-0 inset-x-0 bg-black/60 text-white text-[8px] py-0.5 text-center truncate px-1">
+                        Saved
+                      </span>
+                    </div>
+                  ))}
+
+                  {/* Newly Selected Local Files */}
+                  {selectedFiles.map((file, index) => (
+                    <div key={`file-${index}`} className="relative group border-2 border-accent/60 rounded overflow-hidden aspect-square bg-neutral-100 dark:bg-neutral-800">
+                      <img src={URL.createObjectURL(file)} alt={file.name} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSelectedFile(index)}
+                        className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 opacity-90 group-hover:opacity-100 shadow transition-opacity"
+                        title="Remove file"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                      <span className="absolute bottom-0 inset-x-0 bg-accent text-black font-bold text-[8px] py-0.5 text-center truncate px-1">
+                        New File
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Flags */}
           <div className="flex flex-wrap gap-6 pt-2">
