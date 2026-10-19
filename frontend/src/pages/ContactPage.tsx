@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Input from '../components/ui/Input.tsx';
 import Button from '../components/ui/Button.tsx';
@@ -7,7 +7,7 @@ import api from '../services/api.ts';
 import { useStoreSettings } from '../hooks/useStoreSettings.ts';
 
 const ContactPage: React.FC = () => {
-  const { contactNumber, email: storeEmail, address: storeAddress, cleanWhatsappNumber } = useStoreSettings();
+  const { whatsappNumber, cleanWhatsappNumber, contactNumber, email: storeEmail, address: storeAddress } = useStoreSettings();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -66,20 +66,54 @@ const ContactPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="space-y-4 text-xs font-semibold font-outfit">
+          <div className="space-y-5 text-xs font-semibold font-outfit">
+            {/* Physical Address */}
             <div className="flex items-center space-x-3">
-              <MapPin className="w-5 h-5 text-accent" />
+              <MapPin className="w-5 h-5 text-accent shrink-0" />
               <span>{storeAddress}</span>
             </div>
+
+            {/* WhatsApp */}
             <div className="flex items-center space-x-3">
-              <Phone className="w-5 h-5 text-accent" />
-              <a href={`https://wa.me/${cleanWhatsappNumber}`} target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                {contactNumber} (WhatsApp Available)
-              </a>
+              <MessageCircle className="w-5 h-5 text-emerald-500 shrink-0" />
+              <div className="flex flex-col">
+                <span className="text-[10px] text-text-secondary normal-case font-normal">WhatsApp (Orders &amp; Support)</span>
+                <a
+                  href={`https://wa.me/${cleanWhatsappNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-accent transition-colors font-bold tracking-wider"
+                >
+                  {whatsappNumber} <span className="text-[10px] text-emerald-500 font-bold ml-1">(Chat on WhatsApp)</span>
+                </a>
+              </div>
             </div>
+
+            {/* Direct Phone Call */}
+            {contactNumber && (
+              <div className="flex items-center space-x-3">
+                <Phone className="w-5 h-5 text-accent shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-text-secondary normal-case font-normal">Direct Call / Hotline</span>
+                  <a
+                    href={`tel:${contactNumber.replace(/[^0-9+]/g, '')}`}
+                    className="hover:text-accent transition-colors font-bold tracking-wider"
+                  >
+                    {contactNumber}
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* Email */}
             <div className="flex items-center space-x-3">
-              <Mail className="w-5 h-5 text-accent" />
-              <span className="normal-case">{storeEmail}</span>
+              <Mail className="w-5 h-5 text-accent shrink-0" />
+              <div className="flex flex-col">
+                <span className="text-[10px] text-text-secondary normal-case font-normal">Support Email</span>
+                <a href={`mailto:${storeEmail}`} className="hover:text-accent transition-colors normal-case font-bold tracking-normal">
+                  {storeEmail}
+                </a>
+              </div>
             </div>
 
             {/* Delivery Info */}

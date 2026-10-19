@@ -61,6 +61,9 @@ const AdminSettings: React.FC = () => {
       if (!payload.flashSaleEndDate) {
         payload.flashSaleEndDate = null as any;
       }
+      if (!payload.contactNumber || !payload.contactNumber.trim()) {
+        payload.contactNumber = payload.whatsappNumber;
+      }
       await settingsService.updateSettings(payload);
       toast.success('Store settings saved successfully! 🎉');
     } catch (error: any) {
@@ -146,12 +149,13 @@ const AdminSettings: React.FC = () => {
                 label="WhatsApp Order Number *"
                 {...register('whatsappNumber', { required: 'Required' })}
                 placeholder="e.g. +94771234567"
-                helperText="Orders placed by customers will be routed directly to this WhatsApp number."
+                helperText="Customer orders and Contact Us page WhatsApp button route directly to this number."
               />
               <Input
-                label="Contact Phone Number"
+                label="Contact Phone / Hotline Number"
                 {...register('contactNumber')}
-                placeholder="e.g. +94771234567"
+                placeholder="e.g. +94771234567 (Leave blank to use WhatsApp number)"
+                helperText="Displayed as the calling hotline on the Contact page."
               />
               <Input
                 label="Store Email"

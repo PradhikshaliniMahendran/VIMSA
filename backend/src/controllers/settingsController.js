@@ -15,6 +15,7 @@ const getOrCreateSettings = async () => {
 export const getSettings = async (req, res, next) => {
   try {
     const settings = await getOrCreateSettings();
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.json({ success: true, data: settings });
   } catch (err) {
     next(err);
@@ -51,8 +52,14 @@ export const updateSettings = async (req, res, next) => {
       settings.whatsappNumber = whatsappNumber;
       const cleanNum = whatsappNumber.replace(/[^0-9]/g, '');
       settings.whatsappUrl = `https://wa.me/${cleanNum}`;
+      // If contactNumber is not provided or still set to old placeholder, sync with whatsappNumber
+      if (!contactNumber || contactNumber.trim() === '' || contactNumber === '+94771234567' || contactNumber === '+94 77 123 4567') {
+        settings.contactNumber = whatsappNumber;
+      }
     }
-    if (contactNumber !== undefined) settings.contactNumber = contactNumber;
+    if (contactNumber !== undefined && contactNumber.trim() !== '') {
+      settings.contactNumber = contactNumber;
+    }
     if (email !== undefined) settings.email = email;
     if (address !== undefined) settings.address = address;
     if (facebookUrl !== undefined) settings.facebookUrl = facebookUrl;

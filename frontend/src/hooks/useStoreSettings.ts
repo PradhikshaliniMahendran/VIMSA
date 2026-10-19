@@ -28,7 +28,7 @@ export const useStoreSettings = () => {
 
   const whatsappNumber = settings?.whatsappNumber || '+94771234567';
   const cleanWhatsappNumber = whatsappNumber.replace(/[^0-9]/g, '') || '94771234567';
-  const contactNumber = settings?.contactNumber || '+94 77 123 4567';
+  const contactNumber = settings?.contactNumber || whatsappNumber;
   const email = settings?.email || 'support@vimsaclothing.com';
   const address = settings?.address || 'Bogawanthalawa, Sri Lanka';
   const storeName = settings?.storeName || 'VIMSA';
