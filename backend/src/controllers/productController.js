@@ -10,38 +10,56 @@ export const getAllProducts = async (req, res, next) => {
       status, search, sort = '-createdAt', page = 1, limit = 12, productType
     } = req.query;
 
-    const filter = {};
+    const conditions = [];
     if (productType) {
       if (productType.toUpperCase() === 'DRESS') {
-        filter.productType = { $in: ['DRESS', 'clothing'] };
+        conditions.push({ productType: { $in: ['DRESS', 'clothing'] } });
       } else if (productType.toUpperCase() === 'PLASTIC') {
-        filter.productType = { $in: ['PLASTIC', 'general'] };
+        conditions.push({ productType: { $in: ['PLASTIC', 'general'] } });
       } else {
-        filter.productType = productType;
+        conditions.push({ productType });
       }
     }
-    if (category) filter.category = category;
-    if (brand) filter.brand = brand;
-    if (collection) filter.collectionRef = collection;
-    if (color) filter.colors = { $in: [color] };
-    if (size) filter.sizes = { $in: [size] };
-    if (minPrice || maxPrice) filter.price = { ...(minPrice && { $gte: +minPrice }), ...(maxPrice && { $lte: +maxPrice }) };
-    if (isFeatured === 'true') filter.isFeatured = true;
-    if (isTrending === 'true') filter.isTrending = true;
-    if (isBestSeller === 'true') filter.isBestSeller = true;
-    if (isNewArrival === 'true') filter.isNewArrival = true;
+    if (category) conditions.push({ category });
+    if (brand) conditions.push({ brand });
+    if (collection) conditions.push({ collectionRef: collection });
+    if (color) conditions.push({ colors: { $in: [color] } });
+    if (size) {
+      conditions.push({
+        $or: [
+          { 'sizes.name': size },
+          { sizes: size }
+        ]
+      });
+    }
+    if (minPrice || maxPrice) {
+      conditions.push({
+        price: {
+          ...(minPrice && { $gte: +minPrice }),
+          ...(maxPrice && { $lte: +maxPrice })
+        }
+      });
+    }
+    if (isFeatured === 'true') conditions.push({ isFeatured: true });
+    if (isTrending === 'true') conditions.push({ isTrending: true });
+    if (isBestSeller === 'true') conditions.push({ isBestSeller: true });
+    if (isNewArrival === 'true') conditions.push({ isNewArrival: true });
     if (status) {
-      filter.status = status;
+      conditions.push({ status });
     } else {
-      filter.status = { $ne: 'archived' };
+      conditions.push({ status: { $ne: 'archived' } });
     }
     if (search) {
-      filter.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } },
-        { sku: { $regex: search, $options: 'i' } }
-      ];
+      conditions.push({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } },
+          { sku: { $regex: search, $options: 'i' } }
+        ]
+      });
     }
+
+    const filter = conditions.length > 0 ? { $and: conditions } : {};
 
     const skip = (page - 1) * limit;
     const [products, total] = await Promise.all([

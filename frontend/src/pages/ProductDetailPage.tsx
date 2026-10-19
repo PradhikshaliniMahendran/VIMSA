@@ -33,6 +33,7 @@ const ProductDetailPage: React.FC = () => {
   
   // Modals and tabs toggling
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+  const [sizeGuideTab, setSizeGuideTab] = useState<'bottoms' | 'tops'>('tops');
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'returns'>('desc');
   const [aiStatus, setAiStatus] = useState<string>('none');
   const [aiError, setAiError] = useState<string | null>(null);
@@ -387,21 +388,31 @@ const ProductDetailPage: React.FC = () => {
 
           {/* Sizing/Options buttons */}
           {product.sizes && product.sizes.length > 0 && (() => {
-            const isClothingSize = product.sizes.every((s: any) => {
-              const name = typeof s === 'string' ? s : s.name;
-              return ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'].includes(name);
+            const isClothingProduct = (product.productType || '').toUpperCase() !== 'PLASTIC';
+            const nameAndDesc = `${product.name} ${product.description || ''} ${(product as any).subcategory || ''}`.toLowerCase();
+            const bottomKeywords = ['trouser', 'pant', 'jean', 'denim', 'cargo', 'jogger', 'chino', 'short', 'bottom'];
+            const hasBottomKeyword = bottomKeywords.some((kw) => nameAndDesc.includes(kw));
+            const hasNumericSizes = product.sizes.some((s: any) => {
+              const sName = typeof s === 'string' ? s : s.name;
+              const num = parseInt(sName);
+              return !isNaN(num) && num >= 24 && num <= 54;
             });
+            const isTrouserItem = hasBottomKeyword || hasNumericSizes;
 
             return (
               <div className="mb-6">
                 <div className="flex justify-between items-baseline mb-2.5">
                   <span className="font-outfit uppercase text-[10px] text-text-secondary dark:text-gray-400 font-bold tracking-widest">
-                    {isClothingSize ? 'Select Size:' : 'Select Option:'}
+                    {isClothingProduct ? (isTrouserItem ? 'Select Waist Size:' : 'Select Size:') : 'Select Option:'}
                   </span>
-                  {isClothingSize && (
+                  {isClothingProduct && (
                     <button
-                      onClick={() => setIsSizeGuideOpen(true)}
-                      className="font-outfit uppercase text-[10px] text-accent tracking-widest font-extrabold hover:text-white transition-colors"
+                      type="button"
+                      onClick={() => {
+                        setSizeGuideTab(isTrouserItem ? 'bottoms' : 'tops');
+                        setIsSizeGuideOpen(true);
+                      }}
+                      className="font-outfit uppercase text-[10px] text-accent tracking-widest font-extrabold hover:underline cursor-pointer transition-colors"
                     >
                       Size Guide
                     </button>
@@ -748,30 +759,93 @@ const ProductDetailPage: React.FC = () => {
       {isSizeGuideOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-xs" onClick={() => setIsSizeGuideOpen(false)} />
-          <div className="relative w-full max-w-lg bg-white dark:bg-dark-surface p-6 border border-gray-100 dark:border-dark-border shadow-2xl">
-            <div className="flex justify-between items-center mb-6">
+          <div className="relative w-full max-w-lg bg-white dark:bg-dark-surface p-5 sm:p-6 border border-gray-100 dark:border-dark-border shadow-2xl rounded-xs">
+            <div className="flex justify-between items-center mb-4">
               <h3 className="font-outfit uppercase tracking-widest font-bold text-sm text-accent">VIMSA Sizing Guide</h3>
-              <button onClick={() => setIsSizeGuideOpen(false)} className="text-text-primary dark:text-white">Close</button>
+              <button
+                type="button"
+                onClick={() => setIsSizeGuideOpen(false)}
+                className="text-xs font-bold text-text-secondary hover:text-text-primary dark:hover:text-white cursor-pointer px-2 py-1"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            {/* Category Tabs inside Size Guide */}
+            <div className="flex gap-2 mb-4 border-b border-gray-200 dark:border-dark-border pb-2">
+              <button
+                type="button"
+                onClick={() => setSizeGuideTab('bottoms')}
+                className={`text-xs font-bold uppercase tracking-wider pb-1 transition-all cursor-pointer ${
+                  sizeGuideTab === 'bottoms'
+                    ? 'text-accent border-b-2 border-accent'
+                    : 'text-text-secondary hover:text-text-primary dark:hover:text-white'
+                }`}
+              >
+                👖 Trousers &amp; Jeans (Waist)
+              </button>
+              <button
+                type="button"
+                onClick={() => setSizeGuideTab('tops')}
+                className={`text-xs font-bold uppercase tracking-wider pb-1 transition-all cursor-pointer ${
+                  sizeGuideTab === 'tops'
+                    ? 'text-accent border-b-2 border-accent'
+                    : 'text-text-secondary hover:text-text-primary dark:hover:text-white'
+                }`}
+              >
+                👕 Shirts, Tops &amp; Tees
+              </button>
             </div>
             
             {/* Guide Grid */}
-            <table className="w-full text-left text-xs font-outfit uppercase tracking-wider text-text-primary dark:text-white">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-dark-border">
-                  <th className="py-2.5">Size</th>
-                  <th>Chest (in)</th>
-                  <th>Length (in)</th>
-                  <th>Sleeve (in)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-dark-border font-semibold">
-                <tr><td className="py-2.5">XS</td><td>38</td><td>25</td><td>8.0</td></tr>
-                <tr><td className="py-2.5">S</td><td>40</td><td>26</td><td>8.5</td></tr>
-                <tr><td className="py-2.5">M</td><td>42</td><td>27</td><td>9.0</td></tr>
-                <tr><td className="py-2.5">L</td><td>44</td><td>28</td><td>9.5</td></tr>
-                <tr><td className="py-2.5">XL</td><td>46</td><td>29</td><td>10.0</td></tr>
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              {sizeGuideTab === 'bottoms' ? (
+                <table className="w-full text-left text-xs font-outfit uppercase tracking-wider text-text-primary dark:text-white min-w-[360px]">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-dark-border text-[10px] text-text-secondary">
+                      <th className="py-2.5">Waist Size</th>
+                      <th>Waist (in)</th>
+                      <th>Hip (in)</th>
+                      <th>Inseam (in)</th>
+                      <th>Length (in)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-dark-border font-medium">
+                    <tr><td className="py-2 font-bold text-accent">28</td><td>28 - 29"</td><td>35 - 36"</td><td>30"</td><td>40"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">30</td><td>30 - 31"</td><td>37 - 38"</td><td>31"</td><td>41"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">32</td><td>32 - 33"</td><td>39 - 40"</td><td>32"</td><td>42"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">34</td><td>34 - 35"</td><td>41 - 42"</td><td>32"</td><td>42.5"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">36</td><td>36 - 37"</td><td>43 - 44"</td><td>33"</td><td>43"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">38</td><td>38 - 39"</td><td>45 - 46"</td><td>33"</td><td>43.5"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">40</td><td>40 - 41"</td><td>47 - 48"</td><td>33"</td><td>44"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">42</td><td>42 - 43"</td><td>49 - 50"</td><td>34"</td><td>44.5"</td></tr>
+                  </tbody>
+                </table>
+              ) : (
+                <table className="w-full text-left text-xs font-outfit uppercase tracking-wider text-text-primary dark:text-white min-w-[300px]">
+                  <thead>
+                    <tr className="border-b border-gray-200 dark:border-dark-border text-[10px] text-text-secondary">
+                      <th className="py-2.5">Size</th>
+                      <th>Chest (in)</th>
+                      <th>Length (in)</th>
+                      <th>Sleeve (in)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100 dark:divide-dark-border font-medium">
+                    <tr><td className="py-2 font-bold text-accent">XS</td><td>38"</td><td>25"</td><td>8.0"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">S</td><td>40"</td><td>26"</td><td>8.5"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">M</td><td>42"</td><td>27"</td><td>9.0"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">L</td><td>44"</td><td>28"</td><td>9.5"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">XL</td><td>46"</td><td>29"</td><td>10.0"</td></tr>
+                    <tr><td className="py-2 font-bold text-accent">XXL</td><td>48"</td><td>30"</td><td>10.5"</td></tr>
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            <p className="text-[10px] text-text-secondary mt-4 bg-neutral-50 dark:bg-neutral-900 p-2.5 rounded-xs border border-gray-100 dark:border-dark-border">
+              💡 <span className="font-semibold text-text-primary dark:text-white">Fit Tip:</span> {sizeGuideTab === 'bottoms' ? 'Measure around your natural waistline where your trousers normally rest. If you are between sizes, choose the larger size for a relaxed fit.' : 'Measure around the fullest part of your chest, keeping the tape horizontal.'}
+            </p>
           </div>
         </div>
       )}

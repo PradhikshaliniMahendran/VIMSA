@@ -24,7 +24,8 @@ const plasticCategories = [
 ];
 
 const colorsList = ['#000000', '#FFFFFF', '#D4AF37', '#2E3B2E', '#F5F5DC', '#708090', '#FFB6C1', '#87CEEB'];
-const sizesList = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+const topSizesList = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
+const bottomSizesList = ['28', '30', '32', '34', '36', '38', '40', '42'];
 
 const ShopPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -234,28 +235,85 @@ const ShopPage: React.FC = () => {
 
       {/* Sizing grid (Clothing Only) */}
       {showClothingFilters && (
-        <div>
-          <h3 className="font-outfit uppercase tracking-widest text-xs font-bold text-accent mb-4">
-            Size
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {sizesList.map((size) => (
-              <button
-                key={size}
-                onClick={() => {
-                  const newSize = selectedSize === size ? '' : size;
-                  setSelectedSize(newSize);
-                  updateFilters({ size: newSize });
-                }}
-                className={`w-9 h-9 border text-xs font-outfit uppercase font-semibold transition-all duration-200 flex items-center justify-center ${
-                  selectedSize === size
-                    ? 'bg-black border-black text-white dark:bg-white dark:text-black dark:border-white font-bold'
-                    : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-gray-200 hover:border-black dark:hover:border-white'
-                }`}
-              >
-                {size}
-              </button>
-            ))}
+        <div className="space-y-4">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-outfit uppercase tracking-widest text-xs font-bold text-accent">
+                👖 Trousers / Waist (Inches)
+              </h3>
+              {bottomSizesList.includes(selectedSize) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedSize('');
+                    updateFilters({ size: '' });
+                  }}
+                  className="text-[9px] uppercase font-bold text-text-secondary hover:text-accent cursor-pointer"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {bottomSizesList.map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => {
+                    const newSize = selectedSize === size ? '' : size;
+                    setSelectedSize(newSize);
+                    updateFilters({ size: newSize });
+                  }}
+                  className={`w-9 h-8 border text-xs font-outfit uppercase font-semibold transition-all duration-200 flex items-center justify-center cursor-pointer ${
+                    selectedSize === size
+                      ? 'bg-black border-black text-white dark:bg-white dark:text-black dark:border-white font-bold shadow-xs'
+                      : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-gray-200 hover:border-black dark:hover:border-white'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-outfit uppercase tracking-widest text-xs font-bold text-accent">
+                👕 Tops &amp; Dresses
+              </h3>
+              {topSizesList.includes(selectedSize) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedSize('');
+                    updateFilters({ size: '' });
+                  }}
+                  className="text-[9px] uppercase font-bold text-text-secondary hover:text-accent cursor-pointer"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {topSizesList.map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => {
+                    const newSize = selectedSize === size ? '' : size;
+                    setSelectedSize(newSize);
+                    updateFilters({ size: newSize });
+                  }}
+                  className={`w-9 h-8 border text-xs font-outfit uppercase font-semibold transition-all duration-200 flex items-center justify-center cursor-pointer ${
+                    selectedSize === size
+                      ? 'bg-black border-black text-white dark:bg-white dark:text-black dark:border-white font-bold shadow-xs'
+                      : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-gray-200 hover:border-black dark:hover:border-white'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
