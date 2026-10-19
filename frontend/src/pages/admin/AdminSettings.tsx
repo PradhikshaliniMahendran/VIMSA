@@ -119,22 +119,24 @@ const AdminSettings: React.FC = () => {
   }
 
   return (
-    <div className="p-6 md:p-8 text-xs font-outfit uppercase tracking-wider font-semibold text-text-primary dark:text-white">
-      <h1 className="text-2xl font-extrabold text-text-primary dark:text-white mb-2">
-        Store Settings
-      </h1>
-      <p className="text-[10px] text-text-secondary dark:text-gray-400 mb-8 font-inter uppercase">
-        Manage store brand details, WhatsApp order destination number, shipping fees, flash sales, and security credentials.
-      </p>
+    <div className="space-y-6 sm:space-y-8 text-xs font-outfit uppercase tracking-wider font-semibold text-text-primary dark:text-white max-w-4xl">
+      <div className="border-b border-gray-100 dark:border-dark-border pb-4">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold text-text-primary dark:text-white mb-1">
+          Store Settings
+        </h1>
+        <p className="text-[10px] text-text-secondary dark:text-gray-400 font-inter uppercase">
+          Manage store brand details, WhatsApp order destination number, shipping fees, flash sales, and security credentials.
+        </p>
+      </div>
 
-      <div className="space-y-8 max-w-4xl">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
           {/* Store Details Section */}
-          <section className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 shadow-sm">
-            <h2 className="text-sm font-extrabold text-accent mb-6 tracking-widest">
+          <section className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-4 sm:p-6 shadow-sm rounded-xs">
+            <h2 className="text-sm font-extrabold text-accent mb-4 sm:mb-6 tracking-widest">
               Store Contact &amp; Brand Details
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <Input
                 label="Store Brand Name *"
                 {...register('storeName', { required: 'Required' })}
@@ -178,11 +180,11 @@ const AdminSettings: React.FC = () => {
           </section>
 
           {/* Shipping Configuration */}
-          <section className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 shadow-sm">
-            <h2 className="text-sm font-extrabold text-accent mb-6 tracking-widest">
+          <section className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-4 sm:p-6 shadow-sm rounded-xs">
+            <h2 className="text-sm font-extrabold text-accent mb-4 sm:mb-6 tracking-widest">
               Shipping Configuration
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <Input
                 label="Standard Shipping Fee (Rs.) *"
                 type="number"
@@ -198,8 +200,8 @@ const AdminSettings: React.FC = () => {
           </section>
 
           {/* Flash Sale Banner Configuration */}
-          <section className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
+          <section className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-4 sm:p-6 shadow-sm rounded-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-6">
               <h2 className="text-sm font-extrabold text-accent tracking-widest">
                 Flash Sale Announcement Banner
               </h2>
@@ -215,7 +217,7 @@ const AdminSettings: React.FC = () => {
               </label>
             </div>
 
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 transition-opacity duration-300 ${!flashSaleActive ? 'opacity-40 pointer-events-none' : ''}`}>
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 transition-opacity duration-300 ${!flashSaleActive ? 'opacity-40 pointer-events-none' : ''}`}>
               <div className="md:col-span-2">
                 <Input
                   label="End Date &amp; Time"
@@ -237,14 +239,14 @@ const AdminSettings: React.FC = () => {
           </section>
 
           <div className="flex justify-end pt-2">
-            <Button type="submit" disabled={isSaving} variant="accent" size="lg">
+            <Button type="submit" disabled={isSaving} variant="accent" size="lg" className="w-full sm:w-auto">
               {isSaving ? 'Saving All Settings...' : 'Save Store General Settings'}
             </Button>
           </div>
         </form>
 
         {/* Dedicated Admin Security & Password Reset Section */}
-        <section className="bg-white dark:bg-dark-surface border border-red-500/30 dark:border-red-500/20 p-6 shadow-sm mt-10">
+        <section className="bg-white dark:bg-dark-surface border border-red-500/30 dark:border-red-500/20 p-4 sm:p-6 shadow-sm rounded-xs mt-6 sm:mt-10">
           <h2 className="text-sm font-extrabold text-red-500 mb-2 tracking-widest flex items-center gap-2">
             <span>🔑</span>
             <span>Admin Account Security — Reset Password</span>
@@ -254,7 +256,7 @@ const AdminSettings: React.FC = () => {
           </p>
 
           <form onSubmit={handleChangePassword} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Input
                 label="Current Password *"
                 type="password"
@@ -282,7 +284,7 @@ const AdminSettings: React.FC = () => {
             </div>
 
             <div className="flex justify-end pt-2">
-              <Button type="submit" isLoading={isChangingPassword} variant="accent" className="font-extrabold uppercase tracking-widest">
+              <Button type="submit" isLoading={isChangingPassword} variant="accent" className="font-extrabold uppercase tracking-widest w-full sm:w-auto">
                 Update Admin Password
               </Button>
             </div>

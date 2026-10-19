@@ -118,26 +118,26 @@ const AdminCategories: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 text-xs font-outfit uppercase tracking-wider font-semibold text-text-primary dark:text-white">
+    <div className="space-y-6 sm:space-y-8 text-xs font-outfit uppercase tracking-wider font-semibold text-text-primary dark:text-white">
       {/* Title */}
       <div className="border-b border-gray-100 dark:border-dark-border pb-4">
-        <h1 className="text-xl md:text-2xl font-extrabold">Store Categories Catalog</h1>
+        <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold">Store Categories Catalog</h1>
         <p className="text-[10px] text-text-secondary dark:text-gray-400 mt-1 uppercase font-semibold">
           Create, edit, and organize product categories for Dresses &amp; Home Essentials
         </p>
       </div>
 
       {/* Prominent Always-Visible Category Creation Form */}
-      <div className="bg-white dark:bg-dark-surface border border-accent/30 p-6 md:p-8 shadow-md rounded-sm">
-        <div className="flex items-center space-x-2 mb-6">
+      <div className="bg-white dark:bg-dark-surface border border-accent/30 p-4 sm:p-6 md:p-8 shadow-md rounded-xs">
+        <div className="flex items-center space-x-2 mb-4 sm:mb-6">
           <Tag className="w-5 h-5 text-accent" />
           <h2 className="text-sm font-extrabold text-accent tracking-widest">
             {editingId ? 'Edit Store Category' : 'Add New Category'}
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <Input
               label="Category Name *"
               placeholder="e.g. Maxi Dresses, Kitchenware, Nightwear"
@@ -150,11 +150,11 @@ const AdminCategories: React.FC = () => {
               <label className="text-[10px] uppercase font-bold text-text-secondary dark:text-gray-400 block mb-2">
                 Category Division / Product Type *
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <button
                   type="button"
                   onClick={() => setDivision('DRESS')}
-                  className={`py-2 px-3 border text-[11px] font-bold uppercase transition-all rounded ${
+                  className={`py-2 px-3 border text-[11px] font-bold uppercase transition-all rounded text-center ${
                     division === 'DRESS'
                       ? 'bg-pink-500 text-white border-pink-500 shadow-sm'
                       : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-gray-300 hover:border-pink-500'
@@ -165,7 +165,7 @@ const AdminCategories: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setDivision('PLASTIC')}
-                  className={`py-2 px-3 border text-[11px] font-bold uppercase transition-all rounded ${
+                  className={`py-2 px-3 border text-[11px] font-bold uppercase transition-all rounded text-center ${
                     division === 'PLASTIC'
                       ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm'
                       : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-gray-300 hover:border-emerald-500'
@@ -176,7 +176,7 @@ const AdminCategories: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setDivision('BOTH')}
-                  className={`py-2 px-3 border text-[11px] font-bold uppercase transition-all rounded ${
+                  className={`py-2 px-3 border text-[11px] font-bold uppercase transition-all rounded text-center ${
                     division === 'BOTH'
                       ? 'bg-accent text-black border-accent shadow-sm font-extrabold'
                       : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-gray-300 hover:border-accent'
@@ -197,13 +197,13 @@ const AdminCategories: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-2">
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-2">
             {editingId && (
-              <Button type="button" variant="secondary" size="md" onClick={handleCancelEdit}>
+              <Button type="button" variant="secondary" size="md" onClick={handleCancelEdit} className="w-full sm:w-auto">
                 Cancel Edit
               </Button>
             )}
-            <Button type="submit" variant="accent" size="md" isLoading={submitting} className="font-extrabold">
+            <Button type="submit" variant="accent" size="md" isLoading={submitting} className="font-extrabold w-full sm:w-auto">
               <Plus className="w-4 h-4 mr-1.5 inline" />
               <span>{editingId ? 'Update Category' : 'Save & Create Category'}</span>
             </Button>
@@ -212,8 +212,8 @@ const AdminCategories: React.FC = () => {
       </div>
 
       {/* Category List Table */}
-      <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 shadow-sm">
-        <h2 className="text-sm font-extrabold text-text-primary dark:text-white mb-6 tracking-widest">
+      <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-4 sm:p-6 shadow-sm rounded-xs">
+        <h2 className="text-sm font-extrabold text-text-primary dark:text-white mb-4 sm:mb-6 tracking-widest">
           Existing Categories ({categories.length})
         </h2>
 
@@ -226,14 +226,14 @@ const AdminCategories: React.FC = () => {
             No categories created yet. Fill out the form above to add your first category.
           </div>
         ) : (
-          <div className="overflow-x-auto text-[11px] font-semibold">
-            <table className="w-full text-left">
+          <div className="overflow-x-auto text-[11px] font-semibold -mx-4 sm:mx-0 px-4 sm:px-0">
+            <table className="w-full text-left min-w-[620px]">
               <thead>
                 <tr className="border-b border-gray-100 dark:border-dark-border pb-3 text-[9px] text-text-secondary">
-                  <th className="pb-3">Category Name</th>
-                  <th className="pb-3">Division</th>
-                  <th className="pb-3">URL Slug</th>
-                  <th className="pb-3">Description</th>
+                  <th className="pb-3 pr-4">Category Name</th>
+                  <th className="pb-3 pr-4">Division</th>
+                  <th className="pb-3 pr-4">URL Slug</th>
+                  <th className="pb-3 pr-4">Description</th>
                   <th className="pb-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -241,9 +241,9 @@ const AdminCategories: React.FC = () => {
                 {categories.map((c) => {
                   const divType = c.division || 'DRESS';
                   return (
-                    <tr key={c._id}>
-                      <td className="py-4 font-bold">{c.name}</td>
-                      <td className="py-4">
+                    <tr key={c._id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors">
+                      <td className="py-4 pr-4 font-bold whitespace-nowrap">{c.name}</td>
+                      <td className="py-4 pr-4 whitespace-nowrap">
                         <span
                           className={`px-2.5 py-1 text-[9px] font-extrabold uppercase rounded ${
                             divType === 'PLASTIC'
@@ -256,9 +256,9 @@ const AdminCategories: React.FC = () => {
                           {divType === 'PLASTIC' ? '📦 Home Essentials' : divType === 'DRESS' ? '👗 Dresses & Clothing' : '🌐 Universal'}
                         </span>
                       </td>
-                      <td className="py-4 text-text-secondary dark:text-neutral-400 font-mono text-[10px]">{c.slug}</td>
-                      <td className="py-4 text-text-secondary dark:text-neutral-400 normal-case">{c.description || '-'}</td>
-                      <td className="py-4 text-right">
+                      <td className="py-4 pr-4 text-text-secondary dark:text-neutral-400 font-mono text-[10px] whitespace-nowrap">{c.slug}</td>
+                      <td className="py-4 pr-4 text-text-secondary dark:text-neutral-400 normal-case min-w-[150px]">{c.description || '-'}</td>
+                      <td className="py-4 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end space-x-3">
                           <button
                             onClick={() => handleStartEdit(c)}

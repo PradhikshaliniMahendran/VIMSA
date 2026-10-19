@@ -320,9 +320,9 @@ const AdminProducts: React.FC = () => {
   return (
     <div className="space-y-6 text-xs font-outfit uppercase tracking-wider font-semibold text-text-primary dark:text-white" id="admin-product-management">
       {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 dark:border-dark-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-dark-border pb-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-extrabold">Product Management</h2>
+          <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold">Product Management</h2>
           <p className="text-[10px] text-text-secondary dark:text-gray-400 mt-1 font-semibold">
             Create, Edit, and Control VIMSA Dresses &amp; Home Essentials
           </p>
@@ -332,7 +332,7 @@ const AdminProducts: React.FC = () => {
           variant="accent"
           size="sm"
           onClick={() => setShowTypeSelectModal(true)}
-          className="flex items-center space-x-1.5"
+          className="w-full sm:w-auto flex items-center justify-center space-x-1.5"
         >
           <Plus className="w-4 h-4" />
           <span>Add Product</span>
@@ -340,9 +340,9 @@ const AdminProducts: React.FC = () => {
       </div>
 
       {/* Search & Division Filter Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-4 shadow-xs">
+      <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-3 sm:p-4 shadow-xs">
         {/* Search input */}
-        <div className="relative w-full sm:w-72">
+        <div className="relative w-full md:w-72">
           <Search className="absolute left-3 top-2.5 w-4 h-4 text-text-secondary" />
           <input
             type="text"
@@ -354,10 +354,10 @@ const AdminProducts: React.FC = () => {
         </div>
 
         {/* Division Filter Buttons */}
-        <div className="flex items-center space-x-2">
+        <div className="grid grid-cols-3 sm:flex sm:items-center gap-1.5 sm:gap-2 w-full md:w-auto">
           <button
             onClick={() => setSearchParams({})}
-            className={`px-4 py-2 text-xs font-bold border transition-colors ${
+            className={`px-2.5 sm:px-4 py-2 text-[10px] sm:text-xs font-bold border transition-colors text-center ${
               activeType === '' ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white' : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-white'
             }`}
           >
@@ -365,7 +365,7 @@ const AdminProducts: React.FC = () => {
           </button>
           <button
             onClick={() => setSearchParams({ type: 'DRESS' })}
-            className={`px-4 py-2 text-xs font-bold border transition-colors ${
+            className={`px-2.5 sm:px-4 py-2 text-[10px] sm:text-xs font-bold border transition-colors text-center ${
               activeType === 'DRESS' ? 'bg-pink-500 text-white border-pink-500' : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-white'
             }`}
           >
@@ -373,11 +373,11 @@ const AdminProducts: React.FC = () => {
           </button>
           <button
             onClick={() => setSearchParams({ type: 'PLASTIC' })}
-            className={`px-4 py-2 text-xs font-bold border transition-colors ${
+            className={`px-2.5 sm:px-4 py-2 text-[10px] sm:text-xs font-bold border transition-colors text-center truncate ${
               activeType === 'PLASTIC' ? 'bg-emerald-500 text-white border-emerald-500' : 'border-gray-200 dark:border-dark-border text-text-primary dark:text-white'
             }`}
           >
-            📦 Home Essentials
+            📦 Essentials
           </button>
         </div>
       </div>
@@ -386,18 +386,18 @@ const AdminProducts: React.FC = () => {
       {showTypeSelectModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowTypeSelectModal(false)} />
-          <div className="relative w-full max-w-lg bg-white dark:bg-dark-surface p-8 shadow-2xl border border-gray-100 dark:border-dark-border text-center">
-            <h3 className="font-outfit uppercase tracking-widest text-lg font-extrabold text-accent mb-2">
+          <div className="relative w-full max-w-lg bg-white dark:bg-dark-surface p-5 sm:p-8 shadow-2xl border border-gray-100 dark:border-dark-border text-center max-h-[90vh] overflow-y-auto">
+            <h3 className="font-outfit uppercase tracking-widest text-base sm:text-lg font-extrabold text-accent mb-2">
               Select Product Type
             </h3>
-            <p className="text-xs text-text-secondary dark:text-gray-300 mb-8">
+            <p className="text-xs text-text-secondary dark:text-gray-300 mb-6 sm:mb-8">
               Choose product division to load the appropriate management form.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
                 onClick={() => handleTypeChoice('DRESS')}
-                className="p-6 border-2 border-pink-500/40 hover:border-pink-500 bg-pink-500/5 hover:bg-pink-500/10 transition-all text-center flex flex-col items-center justify-center space-y-2 group rounded-md"
+                className="p-5 sm:p-6 border-2 border-pink-500/40 hover:border-pink-500 bg-pink-500/5 hover:bg-pink-500/10 transition-all text-center flex flex-col items-center justify-center space-y-2 group rounded-md"
               >
                 <span className="text-3xl mb-1">👗</span>
                 <span className="font-extrabold text-sm text-text-primary dark:text-white group-hover:text-pink-500">
@@ -410,7 +410,7 @@ const AdminProducts: React.FC = () => {
 
               <button
                 onClick={() => handleTypeChoice('PLASTIC')}
-                className="p-6 border-2 border-emerald-500/40 hover:border-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/10 transition-all text-center flex flex-col items-center justify-center space-y-2 group rounded-md"
+                className="p-5 sm:p-6 border-2 border-emerald-500/40 hover:border-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/10 transition-all text-center flex flex-col items-center justify-center space-y-2 group rounded-md"
               >
                 <span className="text-3xl mb-1">📦</span>
                 <span className="font-extrabold text-sm text-text-primary dark:text-white group-hover:text-emerald-500">
@@ -427,7 +427,7 @@ const AdminProducts: React.FC = () => {
 
       {/* Dynamic Add / Edit Form */}
       {showAddForm && (
-        <form onSubmit={handleFormSubmit} className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 md:p-8 space-y-5 shadow-lg max-w-2xl text-[11px] relative">
+        <form onSubmit={handleFormSubmit} className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-4 sm:p-6 md:p-8 space-y-5 shadow-lg max-w-3xl text-[11px] relative w-full">
           <button
             type="button"
             onClick={() => setShowAddForm(false)}
@@ -761,12 +761,12 @@ const AdminProducts: React.FC = () => {
             />
           </div>
 
-          <div className="flex space-x-3 pt-4">
-            <Button type="submit" variant="primary" isLoading={submitting}>
-              {editingProduct ? 'Update Product' : 'Save Product'}
-            </Button>
-            <Button type="button" variant="secondary" onClick={() => setShowAddForm(false)}>
+          <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-4">
+            <Button type="button" variant="secondary" onClick={() => setShowAddForm(false)} className="w-full sm:w-auto">
               Cancel
+            </Button>
+            <Button type="submit" variant="primary" isLoading={submitting} className="w-full sm:w-auto">
+              {editingProduct ? 'Update Product' : 'Save Product'}
             </Button>
           </div>
         </form>
@@ -778,61 +778,69 @@ const AdminProducts: React.FC = () => {
           <LoadingSpinner size="lg" />
         </div>
       ) : (
-        <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 shadow-sm overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+        <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-3 sm:p-5 lg:p-6 shadow-sm overflow-x-auto rounded-xs">
+          <table className="w-full text-left border-collapse min-w-[650px]">
             <thead>
               <tr className="border-b border-gray-100 dark:border-dark-border pb-3 text-[10px] text-text-secondary font-bold tracking-widest">
-                <th className="pb-3">PRODUCT</th>
-                <th className="pb-3">TYPE</th>
-                <th className="pb-3">PRICE</th>
-                <th className="pb-3">STOCK</th>
+                <th className="pb-3 pr-3">PRODUCT</th>
+                <th className="pb-3 pr-3">TYPE</th>
+                <th className="pb-3 pr-3">PRICE</th>
+                <th className="pb-3 pr-3">STOCK</th>
                 <th className="pb-3 text-right">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-dark-border text-xs">
-              {products.map((p) => {
-                const divisionName = (p.productType || '').toUpperCase() === 'PLASTIC' ? 'Home Essentials' : 'Dress';
-                return (
-                  <tr key={p._id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors">
-                    <td className="py-4 pr-3 font-bold text-text-primary dark:text-white flex items-center space-x-3">
-                      <img src={p.images?.[0]} alt={p.name} className="w-10 h-12 object-cover bg-neutral-100 border border-gray-100" />
-                      <div>
-                        <p className="line-clamp-1">{p.name}</p>
-                        <p className="text-[9px] text-text-secondary font-mono">SKU: {p.sku}</p>
-                      </div>
-                    </td>
-                    <td className="py-4 pr-3">
-                      <span className={`px-2.5 py-1 text-[9px] font-bold ${divisionName === 'Home Essentials' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-pink-500/10 text-pink-600'}`}>
-                        {divisionName}
-                      </span>
-                    </td>
-                    <td className="py-4 pr-3 font-bold text-accent">
-                      {formatPrice(p.salePrice || p.price)}
-                    </td>
-                    <td className="py-4 pr-3">
-                      {p.stockQuantity} units
-                    </td>
-                    <td className="py-4 text-right">
-                      <div className="flex items-center justify-end space-x-2">
-                        <button
-                          onClick={() => handleStartEdit(p)}
-                          className="p-1.5 text-accent hover:bg-accent/10 transition-colors rounded"
-                          title="Edit Product"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => setDeletingProductId(p._id)}
-                          className="p-1.5 text-error hover:bg-error/10 transition-colors rounded"
-                          title="Delete Product"
-                        >
-                          <Trash className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+              {products.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-text-secondary">
+                    No products found.
+                  </td>
+                </tr>
+              ) : (
+                products.map((p) => {
+                  const divisionName = (p.productType || '').toUpperCase() === 'PLASTIC' ? 'Home Essentials' : 'Dress';
+                  return (
+                    <tr key={p._id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors">
+                      <td className="py-4 pr-3 font-bold text-text-primary dark:text-white flex items-center space-x-3 min-w-[200px]">
+                        <img src={p.images?.[0]} alt={p.name} className="w-10 h-12 object-cover bg-neutral-100 border border-gray-100 shrink-0 rounded-xs" />
+                        <div>
+                          <p className="line-clamp-2">{p.name}</p>
+                          <p className="text-[9px] text-text-secondary font-mono">SKU: {p.sku}</p>
+                        </div>
+                      </td>
+                      <td className="py-4 pr-3 whitespace-nowrap">
+                        <span className={`px-2.5 py-1 text-[9px] font-bold rounded-xs ${divisionName === 'Home Essentials' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-pink-500/10 text-pink-600'}`}>
+                          {divisionName}
+                        </span>
+                      </td>
+                      <td className="py-4 pr-3 font-bold text-accent whitespace-nowrap">
+                        {formatPrice(p.salePrice || p.price)}
+                      </td>
+                      <td className="py-4 pr-3 whitespace-nowrap">
+                        {p.stockQuantity} units
+                      </td>
+                      <td className="py-4 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end space-x-2">
+                          <button
+                            onClick={() => handleStartEdit(p)}
+                            className="p-1.5 text-accent hover:bg-accent/10 transition-colors rounded"
+                            title="Edit Product"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => setDeletingProductId(p._id)}
+                            className="p-1.5 text-error hover:bg-error/10 transition-colors rounded"
+                            title="Delete Product"
+                          >
+                            <Trash className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

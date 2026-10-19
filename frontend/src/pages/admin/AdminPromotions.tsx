@@ -243,18 +243,18 @@ const AdminPromotions: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 text-xs font-outfit uppercase tracking-wider font-semibold text-text-primary dark:text-white">
+    <div className="space-y-6 sm:space-y-8 text-xs font-outfit uppercase tracking-wider font-semibold text-text-primary dark:text-white">
       {/* Title Header */}
       <div className="border-b border-gray-100 dark:border-dark-border pb-4">
-        <h1 className="text-xl md:text-2xl font-extrabold">Promotions &amp; Offer Popup Management</h1>
+        <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold">Promotions &amp; Offer Popup Management</h1>
         <p className="text-[10px] text-text-secondary dark:text-gray-400 mt-1 uppercase font-semibold">
           Control homepage promotional popups, special discount banners, and featured sales campaigns
         </p>
       </div>
 
       {/* Promotion Creation / Edit Form */}
-      <div className="bg-white dark:bg-dark-surface border border-accent/30 p-6 md:p-8 shadow-md rounded-sm">
-        <div className="flex items-center space-x-2 mb-6">
+      <div className="bg-white dark:bg-dark-surface border border-accent/30 p-4 sm:p-6 md:p-8 shadow-md rounded-xs">
+        <div className="flex items-center space-x-2 mb-4 sm:mb-6">
           <Sparkles className="w-5 h-5 text-accent" />
           <h2 className="text-sm font-extrabold text-accent tracking-widest">
             {editingId ? 'Edit Promotional Offer' : 'Create New Promotional Offer'}
@@ -444,13 +444,13 @@ const AdminPromotions: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-3 border-t border-gray-100 dark:border-dark-border">
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3 pt-3 border-t border-gray-100 dark:border-dark-border">
             {editingId && (
-              <Button type="button" variant="secondary" size="md" onClick={handleResetForm}>
+              <Button type="button" variant="secondary" size="md" onClick={handleResetForm} className="w-full sm:w-auto">
                 Cancel Edit
               </Button>
             )}
-            <Button type="submit" variant="accent" size="md" isLoading={submitting} className="font-extrabold">
+            <Button type="submit" variant="accent" size="md" isLoading={submitting} className="font-extrabold w-full sm:w-auto">
               <Plus className="w-4 h-4 mr-1.5 inline" />
               <span>{editingId ? 'Update Promotion' : 'Save & Publish Promotion'}</span>
             </Button>
@@ -459,8 +459,8 @@ const AdminPromotions: React.FC = () => {
       </div>
 
       {/* Promotions List Table */}
-      <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 shadow-sm">
-        <h2 className="text-sm font-extrabold text-text-primary dark:text-white mb-6 tracking-widest">
+      <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-4 sm:p-6 shadow-sm rounded-xs">
+        <h2 className="text-sm font-extrabold text-text-primary dark:text-white mb-4 sm:mb-6 tracking-widest">
           Existing Promotions ({promotions.length})
         </h2>
 
@@ -473,15 +473,15 @@ const AdminPromotions: React.FC = () => {
             No promotions created yet. Fill out the form above to publish your first offer popup.
           </div>
         ) : (
-          <div className="overflow-x-auto text-[11px] font-semibold">
-            <table className="w-full text-left">
+          <div className="overflow-x-auto text-[11px] font-semibold -mx-4 sm:mx-0 px-4 sm:px-0">
+            <table className="w-full text-left min-w-[750px]">
               <thead>
                 <tr className="border-b border-gray-100 dark:border-dark-border pb-3 text-[9px] text-text-secondary">
-                  <th className="pb-3">Title &amp; Offer</th>
-                  <th className="pb-3">Button &amp; Destination Page</th>
-                  <th className="pb-3">Duration (Start → End)</th>
-                  <th className="pb-3">Status</th>
-                  <th className="pb-3">Featured</th>
+                  <th className="pb-3 pr-4">Title &amp; Offer</th>
+                  <th className="pb-3 pr-4">Button &amp; Destination Page</th>
+                  <th className="pb-3 pr-4">Duration (Start → End)</th>
+                  <th className="pb-3 pr-4">Status</th>
+                  <th className="pb-3 pr-4">Featured</th>
                   <th className="pb-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -495,8 +495,8 @@ const AdminPromotions: React.FC = () => {
                   const displayCta = preset ? preset.label : p.ctaLink;
 
                   return (
-                    <tr key={p._id}>
-                      <td className="py-4 font-bold">
+                    <tr key={p._id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors">
+                      <td className="py-4 pr-4 font-bold min-w-[180px]">
                         <div>
                           <p className="text-text-primary dark:text-white font-extrabold">{p.title}</p>
                           {p.discountText && (
@@ -504,15 +504,15 @@ const AdminPromotions: React.FC = () => {
                           )}
                         </div>
                       </td>
-                      <td className="py-4">
+                      <td className="py-4 pr-4 whitespace-nowrap">
                         <span className="font-mono text-[10px] text-text-secondary dark:text-neutral-400">
                           [{p.ctaText}] → {displayCta}
                         </span>
                       </td>
-                      <td className="py-4 text-text-secondary dark:text-neutral-400 font-mono text-[10px]">
+                      <td className="py-4 pr-4 text-text-secondary dark:text-neutral-400 font-mono text-[10px] whitespace-nowrap">
                         {p.startDate ? p.startDate.split('T')[0] : ''} to {p.endDate ? p.endDate.split('T')[0] : ''}
                       </td>
-                      <td className="py-4">
+                      <td className="py-4 pr-4 whitespace-nowrap">
                         <span
                           className={`px-2.5 py-1 text-[9px] font-extrabold uppercase rounded inline-flex items-center gap-1 ${
                             isLive
@@ -524,7 +524,7 @@ const AdminPromotions: React.FC = () => {
                           <span>{isLive ? 'Live Active' : p.status === 'inactive' ? 'Paused' : 'Expired/Scheduled'}</span>
                         </span>
                       </td>
-                      <td className="py-4">
+                      <td className="py-4 pr-4 whitespace-nowrap">
                         {p.isFeatured ? (
                           <span className="px-2 py-0.5 bg-accent/10 text-accent border border-accent/30 text-[9px] font-bold">
                             PRIMARY POPUP
@@ -533,7 +533,7 @@ const AdminPromotions: React.FC = () => {
                           <span className="text-text-secondary dark:text-neutral-500 text-[10px]">-</span>
                         )}
                       </td>
-                      <td className="py-4 text-right">
+                      <td className="py-4 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end space-x-3">
                           <button
                             onClick={() => handleStartEdit(p)}

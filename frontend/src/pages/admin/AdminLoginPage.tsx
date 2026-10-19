@@ -56,8 +56,8 @@ const AdminLoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex justify-center items-center px-4 py-12 text-white font-outfit select-none">
-      <div className="w-full max-w-md bg-[#111318] border border-accent/30 p-8 md:p-10 shadow-2xl rounded-sm">
+    <div className="min-h-screen bg-black flex justify-center items-center px-4 py-8 sm:py-12 text-white font-outfit select-none">
+      <div className="w-full max-w-md bg-[#111318] border border-accent/30 p-6 sm:p-8 md:p-10 shadow-2xl rounded-xs">
         <div className="flex flex-col items-center mb-8 text-center">
           <img src={logoPng} alt="VIMSA Logo" className="h-12 w-auto mb-3" />
           <h2 className="uppercase tracking-widest text-xl font-extrabold text-accent">

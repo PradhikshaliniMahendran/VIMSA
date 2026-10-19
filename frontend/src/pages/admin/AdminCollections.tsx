@@ -115,9 +115,9 @@ const AdminCollections: React.FC = () => {
   return (
     <div className="space-y-6 text-xs font-outfit uppercase tracking-wider font-semibold text-text-primary dark:text-white">
       {/* Title */}
-      <div className="flex justify-between items-center border-b border-gray-100 dark:border-dark-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-dark-border pb-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-extrabold">Collections Catalog</h2>
+          <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold">Collections Catalog</h2>
           <p className="text-[10px] text-text-secondary dark:text-gray-400 mt-1 uppercase font-semibold">
             Define marketing groups, campaigns, and product divisions
           </p>
@@ -136,7 +136,7 @@ const AdminCollections: React.FC = () => {
               setShowAddForm(true);
             }
           }}
-          className="flex items-center space-x-1 py-1.5 px-3"
+          className="w-full sm:w-auto flex items-center justify-center space-x-1.5 py-2 px-3.5"
         >
           <Plus className="w-4 h-4 text-accent" />
           <span>{showAddForm ? 'Cancel' : 'Add Collection'}</span>
@@ -144,15 +144,17 @@ const AdminCollections: React.FC = () => {
       </div>
 
       {showAddForm && (
-        <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-6 space-y-4 max-w-xl animate-fade-in">
-          <h3 className="font-outfit uppercase text-[10px] font-bold text-accent mb-4">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-4 sm:p-6 space-y-4 max-w-xl animate-fade-in rounded-xs">
+          <h3 className="font-outfit uppercase text-[10px] font-bold text-accent mb-3">
             {editingId ? 'Edit Collection' : 'Create New Collection'}
           </h3>
-          <Input label="Collection Name" value={name} onChange={(e) => setName(e.target.value)} required />
-          <Input label="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-          <Button type="submit" variant="primary" isLoading={submitting}>
-            {editingId ? 'Update Collection' : 'Save Collection'}
-          </Button>
+          <Input label="Collection Name *" value={name} onChange={(e) => setName(e.target.value)} required />
+          <Input label="Description (Optional)" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <div className="flex flex-col sm:flex-row gap-2 pt-2">
+            <Button type="submit" variant="primary" isLoading={submitting} className="w-full sm:w-auto">
+              {editingId ? 'Update Collection' : 'Save Collection'}
+            </Button>
+          </div>
         </form>
       )}
 
@@ -161,42 +163,50 @@ const AdminCollections: React.FC = () => {
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="overflow-x-auto text-[11px] font-semibold">
-          <table className="w-full text-left">
+        <div className="bg-white dark:bg-dark-surface border border-gray-100 dark:border-dark-border p-3 sm:p-5 lg:p-6 shadow-sm overflow-x-auto text-[11px] font-semibold rounded-xs">
+          <table className="w-full text-left min-w-[600px]">
             <thead>
               <tr className="border-b border-gray-100 dark:border-dark-border pb-3 text-[9px] text-text-secondary">
-                <th className="pb-3">Collection Name</th>
-                <th className="pb-3">Slug</th>
-                <th className="pb-3">Description</th>
+                <th className="pb-3 pr-4">Collection Name</th>
+                <th className="pb-3 pr-4">Slug</th>
+                <th className="pb-3 pr-4">Description</th>
                 <th className="pb-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-dark-border">
-              {collections.map((c) => (
-                <tr key={c._id}>
-                  <td className="py-4 font-bold">{c.name}</td>
-                  <td className="py-4 text-text-secondary dark:text-neutral-400">{c.slug}</td>
-                  <td className="py-4 text-text-secondary dark:text-neutral-400 normal-case">{c.description || '-'}</td>
-                  <td className="py-4 text-right">
-                    <div className="flex items-center justify-end space-x-3">
-                      <button
-                        onClick={() => handleStartEdit(c)}
-                        className="text-accent hover:text-white transition-colors"
-                        title="Edit Collection"
-                      >
-                        <Edit className="w-4 h-4 inline" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(c._id)}
-                        className="text-error hover:text-white transition-colors"
-                        title="Delete Collection"
-                      >
-                        <Trash className="w-4 h-4 inline" />
-                      </button>
-                    </div>
+              {collections.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-8 text-center text-text-secondary">
+                    No collections created yet.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                collections.map((c) => (
+                  <tr key={c._id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors">
+                    <td className="py-4 pr-4 font-bold whitespace-nowrap">{c.name}</td>
+                    <td className="py-4 pr-4 text-text-secondary dark:text-neutral-400 font-mono text-[10px] whitespace-nowrap">{c.slug}</td>
+                    <td className="py-4 pr-4 text-text-secondary dark:text-neutral-400 normal-case min-w-[150px]">{c.description || '-'}</td>
+                    <td className="py-4 text-right whitespace-nowrap">
+                      <div className="flex items-center justify-end space-x-3">
+                        <button
+                          onClick={() => handleStartEdit(c)}
+                          className="text-accent hover:text-white transition-colors p-1"
+                          title="Edit Collection"
+                        >
+                          <Edit className="w-4 h-4 inline" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(c._id)}
+                          className="text-error hover:text-white transition-colors p-1"
+                          title="Delete Collection"
+                        >
+                          <Trash className="w-4 h-4 inline" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
